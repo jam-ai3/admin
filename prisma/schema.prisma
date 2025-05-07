@@ -1,0 +1,87 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             String    @id @default(uuid())
+  email          String    @unique
+  password       String
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  isAdmin        Boolean   @default(false)
+  freeTrialStart DateTime?
+
+  subscriptions Subscription[]
+  sales         Sale[]
+  reviews       Review[]
+  documents     Document[]
+  analytics     Analytics[]
+}
+
+model Subscription {
+  id            String   @id @default(uuid())
+  createdAt     DateTime @default(now())
+  expiresAt     DateTime
+  generatesUsed Int      @default(0)
+  type          String
+  isActive      Boolean  @default(true)
+  stripeId      String   @unique
+
+  userId String @unique
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Sale {
+  id                 String   @id @default(uuid())
+  productId          String
+  userId             String
+  pricePaidInPennies Int
+  createdAt          DateTime @default(now())
+  couponCode         String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: NoAction)
+}
+
+model Review {
+  id        String   @id @default(uuid())
+  rating    Int
+  message   String
+  createdAt DateTime @default(now())
+
+  userId String @unique
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Document {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  title     String
+  content   String
+
+  userId String
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Analytics {
+  id                String   @id @default(uuid())
+  autocompleteCalls Int      @default(0)
+  shortenCalls      Int      @default(0)
+  lengthenCalls     Int      @default(0)
+  grammarCalls      Int      @default(0)
+  reorderCalls      Int      @default(0)
+  lastUpdated       DateTime @default(now())
+
+  userId String @unique
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
