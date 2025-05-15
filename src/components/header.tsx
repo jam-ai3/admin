@@ -4,13 +4,14 @@ import { lato } from "@/lib/constants";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Nav, NavLink } from "./Nav";
 
 const LOGO_SIZE = 64;
 
 export default function Header() {
   return (
-    <header className="flex justify-between items-center p-4">
-      <Link href="/" className="flex items-center gap-2">
+    <header className="relative flex items-center p-4">
+      <Link href="/" className="flex items-center gap-2 z-10">
         <Image
           src="/logo-no-bg.png"
           alt="logo"
@@ -19,9 +20,13 @@ export default function Header() {
         />
         <span className={`${lato.className} font-semibold text-xl`}>jamAI</span>
       </Link>
-      <ul className="mr-8">
-        <HeaderLink href="/users" text="Users" />
-      </ul>
+      <div className=" w-full absolute left-1/2 -translate-x-1/2">
+
+        <Nav>
+          <NavLink href="/">Dashboard</NavLink>
+          <NavLink href="/users">Users</NavLink>
+        </Nav>
+      </div>
     </header>
   );
 }
