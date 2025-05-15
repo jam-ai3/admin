@@ -25,37 +25,28 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
-import { FormatedCallsProps } from "../page"
+import { FormattedUsersProps } from "../page"
 
 const chartConfig = {
     visitors: {
         label: "Visitors",
     },
-    totalCalls: {
-        label: "Total Calls",
+    totalUsers: {
+        label: "Total Users",
         color: "hsl(var(--chart-2))",
     },
 } satisfies ChartConfig
 
 
-const CallTypes = [
-    { value: "autocomplete", label: "Autocomplete" },
-    { value: "shorten", label: "Shorten" },
-    { value: "lengthen", label: "Lengthen" },
-    { value: "grammar", label: "Grammar" },
-    { value: "reorder", label: "Reorder" },
-    { value: "All", label: "All" },
-]
 
 
 
-
-export function UsageChart({ calls }: { calls: FormatedCallsProps[] }) {
+export function UsageChartUsers({ calls }: { calls: FormattedUsersProps[] }) {
     const [timeRange, setTimeRange] = React.useState("90d")
-    const [callType, setCallType] = React.useState("All")
 
     const filteredData = calls.filter((item) => {
         const date = new Date(item.date)
+        console.log(date)
         let daysToSubtract = 90
         if (timeRange === "30d") {
             daysToSubtract = 30
@@ -65,18 +56,18 @@ export function UsageChart({ calls }: { calls: FormatedCallsProps[] }) {
         const startDate = new Date();
         startDate.setDate(startDate.getDate() - daysToSubtract);
         const inRange = date >= startDate
-        const callTypeMatch = callType === item.type
-        return inRange && callTypeMatch
-    }) 
+        console.log(inRange)
+        return inRange 
+    })
 
 
     return (
         <Card className="w-full justify-center">
             <CardHeader className="flex items-center gap-2 space-y-0 border-b py-5 sm:flex-row">
                 <div className="grid flex-1 gap-1 text-center sm:text-left">
-                    <CardTitle>Total User Usage</CardTitle>
+                    <CardTitle>Total User Sign Ups</CardTitle>
                     <CardDescription>
-                        Showing the total number of tool calls per day
+                        Showing the total number of sign ups per day
                     </CardDescription>
                 </div>
                 <Select value={timeRange} onValueChange={setTimeRange}>
@@ -98,23 +89,7 @@ export function UsageChart({ calls }: { calls: FormatedCallsProps[] }) {
                         </SelectItem>
                     </SelectContent>
                 </Select>
-                <Select value={callType} onValueChange={setCallType}>
-                    <SelectTrigger
-                        className="w-[160px] rounded-lg sm:ml-auto"
-                        aria-label="Select a value"
-                    >
-                        <SelectValue placeholder="Call Types" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        {
-                            CallTypes.map((item) => (
-                                <SelectItem key={item.value} value={item.value} className="rounded-lg">
-                                    {item.label}
-                                </SelectItem>
-                            ))
-                        }
-                    </SelectContent>
-                </Select>
+
             </CardHeader>
             <CardContent className="flex w-full px-2 pt-4 sm:px-6 sm:pt-6">
                 <ChartContainer
@@ -159,7 +134,7 @@ export function UsageChart({ calls }: { calls: FormatedCallsProps[] }) {
                             }
                         />
                         <Area
-                            dataKey="totalCalls"
+                            dataKey="totalUsers"
                             type="natural"
                             fill={ACCENT_COLOR}
                             stroke={ACCENT_COLOR}
