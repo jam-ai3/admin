@@ -23,6 +23,9 @@ async function fetchUserData() {
         },
       },
     },
+    orderBy: {
+      createdAt: "desc",
+    },
   });
 }
 

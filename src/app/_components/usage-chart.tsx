@@ -1,8 +1,8 @@
 "use client"
 
 import * as React from "react"
-import { Area, AreaChart, CartesianGrid, XAxis } from "recharts"
-
+import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts"
+import { ACCENT_COLOR } from "@/lib/constants"
 import {
     Card,
     CardContent,
@@ -25,7 +25,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
-import { formatedCallsProps } from "../page"
+import { FormatedCallsProps } from "../page"
 
 const chartConfig = {
     visitors: {
@@ -38,30 +38,40 @@ const chartConfig = {
 } satisfies ChartConfig
 
 
+const CallTypes = [
+    { value: "autocomplete", label: "Autocomplete" },
+    { value: "shorten", label: "Shorten" },
+    { value: "lengthen", label: "Lengthen" },
+    { value: "grammar", label: "Grammar" },
+    { value: "reorder", label: "Reorder" },
+    { value: "All", label: "All" },
+]
 
 
 
-export function UsageChart({ calls }: { calls: formatedCallsProps[]}) {
+
+export function UsageChart({ calls }: { calls: FormatedCallsProps[] }) {
     const [timeRange, setTimeRange] = React.useState("90d")
+    const [callType, setCallType] = React.useState("All")
 
     const filteredData = calls.filter((item) => {
         const date = new Date(item.date)
-        const referenceDate = new Date("2024-06-30")
         let daysToSubtract = 90
         if (timeRange === "30d") {
             daysToSubtract = 30
         } else if (timeRange === "7d") {
             daysToSubtract = 7
         }
-        const startDate = new Date(referenceDate)
-        startDate.setDate(startDate.getDate() - daysToSubtract)
-        return date >= startDate
-    })
+        const startDate = new Date();
+        startDate.setDate(startDate.getDate() - daysToSubtract);
+        const inRange = date >= startDate
+        const callTypeMatch = callType === item.type
+        return inRange && callTypeMatch
+    }) 
 
-    console.log("filteredData", filteredData)
 
     return (
-        <Card>
+        <Card className="w-full justify-center">
             <CardHeader className="flex items-center gap-2 space-y-0 border-b py-5 sm:flex-row">
                 <div className="grid flex-1 gap-1 text-center sm:text-left">
                     <CardTitle>Total User Usage</CardTitle>
@@ -88,31 +98,34 @@ export function UsageChart({ calls }: { calls: formatedCallsProps[]}) {
                         </SelectItem>
                     </SelectContent>
                 </Select>
+                <Select value={callType} onValueChange={setCallType}>
+                    <SelectTrigger
+                        className="w-[160px] rounded-lg sm:ml-auto"
+                        aria-label="Select a value"
+                    >
+                        <SelectValue placeholder="Call Types" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        {
+                            CallTypes.map((item) => (
+                                <SelectItem key={item.value} value={item.value} className="rounded-lg">
+                                    {item.label}
+                                </SelectItem>
+                            ))
+                        }
+                    </SelectContent>
+                </Select>
             </CardHeader>
-            <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6">
+            <CardContent className="flex w-full px-2 pt-4 sm:px-6 sm:pt-6">
                 <ChartContainer
                     config={chartConfig}
                     className="aspect-auto h-[250px] w-full"
                 >
                     <AreaChart data={filteredData}>
-                        <defs>
-                            <linearGradient id="totalCalls" x1="0" y1="0" x2="0" y2="1">
-                                <stop
-                                    offset="5%"
-                                    stopColor="var(--color-desktop)"
-                                    stopOpacity={0.8}
-                                />
-                                <stop
-                                    offset="95%"
-                                    stopColor="var(--color-desktop)"
-                                    stopOpacity={0.1}
-                                />
-                            </linearGradient>
-                        </defs>
                         <CartesianGrid vertical={false} />
                         <XAxis
                             dataKey="date"
-                            tickLine={false}
+                            // tickLine={false}
                             axisLine={false}
                             tickMargin={8}
                             minTickGap={32}
@@ -123,6 +136,13 @@ export function UsageChart({ calls }: { calls: formatedCallsProps[]}) {
                                     day: "numeric",
                                 })
                             }}
+                        />
+                        <YAxis
+                            tickLine={false}
+                            axisLine={false}
+                            tickMargin={8}
+                            tick={{ fontSize: 12 }}
+
                         />
                         <ChartTooltip
                             cursor={false}
@@ -140,10 +160,11 @@ export function UsageChart({ calls }: { calls: formatedCallsProps[]}) {
                         />
                         <Area
                             dataKey="totalCalls"
-                            type="monotone"
-                            fill="url(#totalCalls)"
-                            stroke="var(--color-totalCalls)"
+                            type="natural"
+                            fill={ACCENT_COLOR}
+                            stroke={ACCENT_COLOR}
                             stackId="a"
+                            fillOpacity={0.3}
                         />
 
                         <ChartLegend content={<ChartLegendContent />} />

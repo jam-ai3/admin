@@ -1,5 +1,7 @@
 "use server"
 import db from "@/db/db"
+import { Prisma } from "@prisma/client"
+import { redirect } from "next/navigation"
 
 export async function createUser() {
     const MaxDaysAgo = 30
@@ -11,7 +13,17 @@ export async function createUser() {
             createdAt: new Date(Date.now() - randomMS)
         }
     })
-    console.log(user.email)
+
+    redirect("/")
+}
+
+const analyticsFieldMap: Record<string, keyof Prisma.AnalyticsUpdateInput> =
+{
+    autocomplete: 'autocompleteCalls',
+    shorten: 'shortenCalls',
+    lengthen: 'lengthenCalls',
+    grammar: 'grammarCalls',
+    reorder: 'reorderCalls'
 }
 
 export async function createIndividualCall() {
@@ -20,6 +32,7 @@ export async function createIndividualCall() {
     const randomUser = users[Math.floor(Math.random() * userLength)]
     const type = ['autocomplete', 'shorten', 'lengthen', 'grammar', 'reorder'][Math.floor(Math.random() * 5)]
     const randomDate = new Date(Date.now() - Math.floor(Math.random() * 30 * 24 * 60 * 60 * 1000))
+    const field = analyticsFieldMap[type]
     const newCall = await db.individualCall.create({
         data: {
             userId: randomUser.id,
@@ -27,6 +40,20 @@ export async function createIndividualCall() {
             createdAt: randomDate
         }
     })
+    const updatedUser = await db.analytics.upsert({
+        where: {
+            userId: randomUser.id
+        },
+        update: {
+            [field]: {increment: 1},
+            lastUpdated: new Date()
+        },
+        create: {
+            userId: randomUser.id,
+            [field]: 1
+        }
 
-    console.log(newCall)
+    })
+
+    redirect("/")
 }

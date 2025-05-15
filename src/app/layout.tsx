@@ -31,7 +31,7 @@ export default function RootLayout({
       >
         <Header />
         <main>
-            <div className="container my-6">
+            <div className="w-full px-4 sm:px-6 lg:px-8 my-6">
               {children}
             </div>
         </main>

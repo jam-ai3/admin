@@ -10,6 +10,9 @@ export async function getUsageData(numOfUsers: number) {
             createdAt: {
                 gte: new Date(Date.now() - numOfUsers * 24 * 60 * 60 * 1000)
             }
+        },
+        orderBy: {
+            createdAt: "asc"
         }
     })
     return individualCalls
