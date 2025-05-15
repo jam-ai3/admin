@@ -3,7 +3,6 @@
 import { lato } from "@/lib/constants";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { Nav, NavLink } from "./Nav";
 
 const LOGO_SIZE = 64;
@@ -31,24 +30,24 @@ export default function Header() {
   );
 }
 
-type HeaderLinkProps = {
-  href: string;
-  text: string;
-};
+// type HeaderLinkProps = {
+//   href: string;
+//   text: string;
+// };
 
-function HeaderLink({ href, text }: HeaderLinkProps) {
-  const pathname = usePathname();
+// function HeaderLink({ href, text }: HeaderLinkProps) {
+//   const pathname = usePathname();
 
-  return (
-    <li>
-      <Link
-        href={href}
-        className={
-          pathname === href ? "font-semibold" : "text-muted-foreground"
-        }
-      >
-        {text}
-      </Link>
-    </li>
-  );
-}
+//   return (
+//     <li>
+//       <Link
+//         href={href}
+//         className={
+//           pathname === href ? "font-semibold" : "text-muted-foreground"
+//         }
+//       >
+//         {text}
+//       </Link>
+//     </li>
+//   );
+// }

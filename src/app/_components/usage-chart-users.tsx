@@ -46,7 +46,6 @@ export function UsageChartUsers({ calls }: { calls: FormattedUsersProps[] }) {
 
     const filteredData = calls.filter((item) => {
         const date = new Date(item.date)
-        console.log(date)
         let daysToSubtract = 90
         if (timeRange === "30d") {
             daysToSubtract = 30
@@ -56,7 +55,6 @@ export function UsageChartUsers({ calls }: { calls: FormattedUsersProps[] }) {
         const startDate = new Date();
         startDate.setDate(startDate.getDate() - daysToSubtract);
         const inRange = date >= startDate
-        console.log(inRange)
         return inRange 
     })
 

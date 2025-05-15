@@ -6,7 +6,7 @@ import { redirect } from "next/navigation"
 export async function createUser() {
     const MaxDaysAgo = 30
     const randomMS = Math.floor(Math.random() * MaxDaysAgo * 24 * 60 * 60 * 1000)
-    const user = await db.user.create({
+    await db.user.create({
         data: {
             email: `${crypto.randomUUID().slice(0, 5)}@test.com`,
             password: 'testtest',
@@ -33,14 +33,14 @@ export async function createIndividualCall() {
     const type = ['autocomplete', 'shorten', 'lengthen', 'grammar', 'reorder'][Math.floor(Math.random() * 5)]
     const randomDate = new Date(Date.now() - Math.floor(Math.random() * 30 * 24 * 60 * 60 * 1000))
     const field = analyticsFieldMap[type]
-    const newCall = await db.individualCall.create({
+    await db.individualCall.create({
         data: {
             userId: randomUser.id,
             type: type,
             createdAt: randomDate
         }
     })
-    const updatedUser = await db.analytics.upsert({
+    await db.analytics.upsert({
         where: {
             userId: randomUser.id
         },
