@@ -57,3 +57,33 @@ export async function createIndividualCall() {
 
     redirect("/")
 }
+
+export async function createRandomMessage() {
+    const users = await db.user.findMany({})
+    const userLength = users.length
+    const randomUser = users[Math.floor(Math.random() * userLength)] 
+    const randomTxt = crypto.randomUUID().slice(0, 5) + "_RANDOM_MESSAGE"
+    await db.message.create({
+        data: {
+            name: randomUser.id,
+            email: randomUser.email,
+            message: randomTxt
+        }
+    })
+    redirect("/contact")
+}
+
+export async function createRandomFeedback() {
+    const users = await db.user.findMany({})
+    const userLength = users.length
+    const randomUser = users[Math.floor(Math.random() * userLength)] 
+    const randomTxt = crypto.randomUUID().slice(0, 5) + "_RANDOM_FEEDBACk"
+    await db.review.create({
+        data: {
+            rating: Math.floor(Math.random() * 5),
+            userId: randomUser.id,
+            message: randomTxt
+        }
+    })
+    redirect("/contact") 
+}

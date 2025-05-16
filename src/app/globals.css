@@ -120,3 +120,21 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Custom Styles */
+
+:root {
+  --custom-accent: rgb(4, 153, 4);
+  --custom-accent-dark: rgb(3, 128, 3);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+button:hover {
+  cursor: pointer;
+}
+button:disabled {
+  cursor: not-allowed;
+}

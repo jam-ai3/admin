@@ -55,10 +55,17 @@ model Review {
   rating    Int
   message   String
   createdAt DateTime @default(now())
-
   userId String @unique
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Message {
+  id String @id @default(uuid())
+  name String
+  email String
+  message String
+  dateResponded DateTime?
 }
 
 model Document {

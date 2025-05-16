@@ -24,6 +24,7 @@ export default function Header() {
         <Nav>
           <NavLink href="/">Dashboard</NavLink>
           <NavLink href="/users">Users</NavLink>
+          <NavLink href="/contact">Messages</NavLink>
         </Nav>
       </div>
     </header>
