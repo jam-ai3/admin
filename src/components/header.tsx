@@ -3,7 +3,7 @@
 import { lato } from "@/lib/constants";
 import Image from "next/image";
 import Link from "next/link";
-import { Nav, NavLink } from "./nav";
+import { Nav, NavLink } from "./Nav";
 
 const LOGO_SIZE = 64;
 
