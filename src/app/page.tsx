@@ -6,6 +6,8 @@ import { IndividualCall, User } from "@prisma/client";
 import { SectionCard, SectionTypeProps } from "./_components/section-card";
 import { UsageChartUsers } from "./_components/usage-chart-users";
 
+export const dynamic = "force-dynamic";
+
 export type FormatedCallsProps = {
   date: string;
   type: string;
