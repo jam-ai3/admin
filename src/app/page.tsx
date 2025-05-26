@@ -120,10 +120,19 @@ function getCallsCardInfo(
 }
 
 export default async function Home() {
+<<<<<<< HEAD
   const calls = await getUsageData(90);
   const users = await getRecentUsers(90);
   const formatedCalls = await formatCalls(calls);
   const formatedUsers = await formatUsers(users);
+=======
+  const [calls, users] = await Promise.all([
+    getUsageData(90),
+    getRecentUsers(90),
+  ]);
+  const formatedCalls = formatCalls(calls);
+  const formatedUsers = formatUsers(users);
+>>>>>>> 9c0ce266baa20837b17ac0aa5db5f1208517d47e
   const userDailyCardInfo = getUserCardInfo(
     users,
     1,
@@ -146,7 +155,7 @@ export default async function Home() {
   );
 
   return (
-    <div className="grid grid-cols-2 grid-rows-2 gap-2 px-4 sm:px-6 lg:px-8 w-full py-2 ">
+    <div className="gap-2 grid grid-cols-2 grid-rows-2 px-4 sm:px-6 lg:px-8 py-2 w-full">
       <div className="col-span-2 row-span-1">
         <div>
           {process.env.NODE_ENV === "development" && <ProductionButtons />}
@@ -157,19 +166,18 @@ export default async function Home() {
         <UsageChartUsers calls={formatedUsers} />
       </div>
       <div className="col-span-1 row-span-1">
-        <div className="grid grid-cols-2 grid-rows-2 gap-10">
-          <div className="max-w-sm w-full">
-            <SectionCard {...userDailyCardInfo}></SectionCard>
+        <div className="gap-10 grid grid-cols-2 grid-rows-2">
+          <div className="w-full max-w-sm">
+            <SectionCard {...userDailyCardInfo} />
           </div>
-          <div className="max-w-sm w-full">
-            <SectionCard {...userWeeklyCardInfo}></SectionCard>
+          <div className="w-full max-w-sm">
+            <SectionCard {...userWeeklyCardInfo} />
           </div>
-
-          <div className="max-w-sm w-full">
-            <SectionCard {...callsDailyCardInfo}></SectionCard>
+          <div className="w-full max-w-sm">
+            <SectionCard {...callsDailyCardInfo} />
           </div>
-          <div className="max-w-sm w-full">
-            <SectionCard {...callsWeeklyCardInfo}></SectionCard>
+          <div className="w-full max-w-sm">
+            <SectionCard {...callsWeeklyCardInfo} />
           </div>
         </div>
       </div>
@@ -179,7 +187,11 @@ export default async function Home() {
 
 function ProductionButtons() {
   return (
+<<<<<<< HEAD
     <div className="flex space-x-4 justify-end">
+=======
+    <div className="flex justify-end space-x-4">
+>>>>>>> 9c0ce266baa20837b17ac0aa5db5f1208517d47e
       <Button onClick={createUser}>Create Random User</Button>
       <Button onClick={createIndividualCall}>Create Random Call</Button>
     </div>

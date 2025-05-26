@@ -1,8 +1,6 @@
-"use server"
+"use server";
 
-import db from "@/db/db"
-
-
+import db from "@/db/db";
 
 export async function getUsageData(numOfDays: number) {
     return await db.individualCall.findMany({
