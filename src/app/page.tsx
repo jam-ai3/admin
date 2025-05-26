@@ -120,19 +120,12 @@ function getCallsCardInfo(
 }
 
 export default async function Home() {
-<<<<<<< HEAD
-  const calls = await getUsageData(90);
-  const users = await getRecentUsers(90);
-  const formatedCalls = await formatCalls(calls);
-  const formatedUsers = await formatUsers(users);
-=======
   const [calls, users] = await Promise.all([
     getUsageData(90),
     getRecentUsers(90),
   ]);
   const formatedCalls = formatCalls(calls);
   const formatedUsers = formatUsers(users);
->>>>>>> 9c0ce266baa20837b17ac0aa5db5f1208517d47e
   const userDailyCardInfo = getUserCardInfo(
     users,
     1,
@@ -187,11 +180,7 @@ export default async function Home() {
 
 function ProductionButtons() {
   return (
-<<<<<<< HEAD
     <div className="flex space-x-4 justify-end">
-=======
-    <div className="flex justify-end space-x-4">
->>>>>>> 9c0ce266baa20837b17ac0aa5db5f1208517d47e
       <Button onClick={createUser}>Create Random User</Button>
       <Button onClick={createIndividualCall}>Create Random Call</Button>
     </div>
